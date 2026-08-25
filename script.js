@@ -1,25 +1,11 @@
-// ==========================================
-// PRO SMP WORKER URLS
-// ==========================================
-
 const STAFF_WORKER_URL = "https://staff.bs8723201.workers.dev/";
 const RANK_WORKER_URL = "https://rank.bs8723201.workers.dev/";
 const MEDIA_WORKER_URL = "https://media.bs8723201.workers.dev/";
-
-
-// ==========================================
-// COPY SERVER IP
-// ==========================================
 
 function copyIP() {
   navigator.clipboard.writeText("prosmp.mcsh.io");
   alert("Server IP copied: prosmp.mcsh.io");
 }
-
-
-// ==========================================
-// AUTO SELECT RANK
-// ==========================================
 
 const params = new URLSearchParams(window.location.search);
 const selectedRank = params.get("rank");
@@ -29,14 +15,8 @@ if (rankSelect && selectedRank) {
   rankSelect.value = selectedRank;
 }
 
-
-// ==========================================
-// SEND APPLICATION
-// ==========================================
-
 async function submitApplication(workerUrl, form) {
   const status = document.getElementById("status");
-
   const data = Object.fromEntries(new FormData(form).entries());
 
   status.textContent = "⏳ Submitting...";
@@ -65,11 +45,6 @@ async function submitApplication(workerUrl, form) {
   }
 }
 
-
-// ==========================================
-// STAFF APPLICATION
-// ==========================================
-
 const staffForm = document.getElementById("staffForm");
 
 if (staffForm) {
@@ -79,11 +54,6 @@ if (staffForm) {
   });
 }
 
-
-// ==========================================
-// RANK BUY APPLICATION
-// ==========================================
-
 const rankForm = document.getElementById("rankForm");
 
 if (rankForm) {
@@ -92,11 +62,6 @@ if (rankForm) {
     submitApplication(RANK_WORKER_URL, rankForm);
   });
 }
-
-
-// ==========================================
-// MEDIA APPLICATION
-// ==========================================
 
 const mediaForm = document.getElementById("mediaForm");
 
