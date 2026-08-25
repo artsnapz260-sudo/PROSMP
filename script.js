@@ -1,38 +1,126 @@
-// Paste your Cloudflare Worker URL here after deploying it.
-const WORKER_URL = "YOUR_CLOUDFLARE_WORKER_URL";
+// ==========================================
+// PRO SMP CLOUDFLARE WORKER URLs
+// ==========================================
 
-function copyIP(){
+const STAFF_WORKER_URL = "https://staff.bs8723201.workers.dev/";
+const RANK_WORKER_URL = "https://rank.bs8723201.workers.dev/";
+const MEDIA_WORKER_URL = "https://media.bs8723201.workers.dev/";
+
+
+// ==========================================
+// COPY SERVER IP
+// ==========================================
+
+function copyIP() {
   navigator.clipboard.writeText("prosmp.mcsh.io");
+
   alert("Server IP copied: prosmp.mcsh.io");
 }
 
-const params = new URLSearchParams(window.location.search);
-const selected = params.get("rank");
-const rankSelect = document.getElementById("rankSelect");
-if (rankSelect && selected) rankSelect.value = selected;
 
-async function submitApplication(type, form){
+// ==========================================
+// AUTO SELECT RANK FROM RANKS PAGE
+// ==========================================
+
+const params = new URLSearchParams(window.location.search);
+const selectedRank = params.get("rank");
+
+const rankSelect = document.getElementById("rankSelect");
+
+if (rankSelect && selectedRank) {
+  rankSelect.value = selectedRank;
+}
+
+
+// ==========================================
+// SEND FORM TO WORKER
+// ==========================================
+
+async function submitApplication(workerUrl, form) {
   const status = document.getElementById("status");
-  if (WORKER_URL === "YOUR_CLOUDFLARE_WORKER_URL"){
-    status.textContent = "⚠️ Website form is ready. Add your Cloudflare Worker URL in script.js.";
-    return;
-  }
-  const data = Object.fromEntries(new FormData(form).entries());
-  data.type = type;
-  status.textContent = "Submitting...";
-  try{
-    const response = await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
+
+  const data = Object.fromEntries(
+    new FormData(form).entries()
+  );
+
+  status.textContent = "⏳ Submitting...";
+
+  try {
+    const response = await fetch(workerUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
     const result = await response.json();
-    status.textContent = result.success ? "✅ "+result.message : "❌ "+(result.message || "Submission failed");
-    if(result.success) form.reset();
-  }catch(e){
-    status.textContent = "❌ Connection error. Check your Worker URL.";
+
+    if (result.success) {
+      status.textContent = "✅ " + result.message;
+      form.reset();
+    } else {
+      status.textContent = "❌ " + (result.message || "Submission failed");
+    }
+
+  } catch (error) {
+    console.error(error);
+
+    status.textContent =
+      "❌ Connection error. Please try again later.";
   }
 }
 
-const staffForm=document.getElementById("staffForm");
-const rankForm=document.getElementById("rankForm");
-const mediaForm=document.getElementById("mediaForm");
-if(staffForm)staffForm.addEventListener("submit",e=>{e.preventDefault();submitApplication("staff",staffForm)});
-if(rankForm)rankForm.addEventListener("submit",e=>{e.preventDefault();submitApplication("rank",rankForm)});
-if(mediaForm)mediaForm.addEventListener("submit",e=>{e.preventDefault();submitApplication("media",mediaForm)});
+
+// ==========================================
+// STAFF APPLICATION
+// ==========================================
+
+const staffForm = document.getElementById("staffForm");
+
+if (staffForm) {
+  staffForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    submitApplication(
+      STAFF_WORKER_URL,
+      staffForm
+    );
+  });
+}
+
+
+// ==========================================
+// RANK BUY APPLICATION
+// ==========================================
+
+const rankForm = document.getElementById("rankForm");
+
+if (rankForm) {
+  rankForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    submitApplication(
+      RANK_WORKER_URL,
+      rankForm
+    );
+  });
+}
+
+
+// ==========================================
+// MEDIA APPLICATION
+// ==========================================
+
+const mediaForm = document.getElementById("mediaForm");
+
+if (mediaForm) {
+  mediaForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    submitApplication(
+      MEDIA_WORKER_URL,
+      mediaForm
+    );
+  });
+}
