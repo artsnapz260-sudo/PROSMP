@@ -1,5 +1,5 @@
 // ==========================================
-// PRO SMP CLOUDFLARE WORKER URLs
+// PRO SMP WORKER URLS
 // ==========================================
 
 const STAFF_WORKER_URL = "https://staff.bs8723201.workers.dev/";
@@ -13,18 +13,16 @@ const MEDIA_WORKER_URL = "https://media.bs8723201.workers.dev/";
 
 function copyIP() {
   navigator.clipboard.writeText("prosmp.mcsh.io");
-
   alert("Server IP copied: prosmp.mcsh.io");
 }
 
 
 // ==========================================
-// AUTO SELECT RANK FROM RANKS PAGE
+// AUTO SELECT RANK
 // ==========================================
 
 const params = new URLSearchParams(window.location.search);
 const selectedRank = params.get("rank");
-
 const rankSelect = document.getElementById("rankSelect");
 
 if (rankSelect && selectedRank) {
@@ -33,15 +31,13 @@ if (rankSelect && selectedRank) {
 
 
 // ==========================================
-// SEND FORM TO WORKER
+// SEND APPLICATION
 // ==========================================
 
 async function submitApplication(workerUrl, form) {
   const status = document.getElementById("status");
 
-  const data = Object.fromEntries(
-    new FormData(form).entries()
-  );
+  const data = Object.fromEntries(new FormData(form).entries());
 
   status.textContent = "⏳ Submitting...";
 
@@ -65,9 +61,7 @@ async function submitApplication(workerUrl, form) {
 
   } catch (error) {
     console.error(error);
-
-    status.textContent =
-      "❌ Connection error. Please try again later.";
+    status.textContent = "❌ Connection error. Please try again later.";
   }
 }
 
@@ -81,11 +75,7 @@ const staffForm = document.getElementById("staffForm");
 if (staffForm) {
   staffForm.addEventListener("submit", function(event) {
     event.preventDefault();
-
-    submitApplication(
-      STAFF_WORKER_URL,
-      staffForm
-    );
+    submitApplication(STAFF_WORKER_URL, staffForm);
   });
 }
 
@@ -99,11 +89,7 @@ const rankForm = document.getElementById("rankForm");
 if (rankForm) {
   rankForm.addEventListener("submit", function(event) {
     event.preventDefault();
-
-    submitApplication(
-      RANK_WORKER_URL,
-      rankForm
-    );
+    submitApplication(RANK_WORKER_URL, rankForm);
   });
 }
 
@@ -117,10 +103,6 @@ const mediaForm = document.getElementById("mediaForm");
 if (mediaForm) {
   mediaForm.addEventListener("submit", function(event) {
     event.preventDefault();
-
-    submitApplication(
-      MEDIA_WORKER_URL,
-      mediaForm
-    );
+    submitApplication(MEDIA_WORKER_URL, mediaForm);
   });
 }
